@@ -7,11 +7,10 @@
 <table>
     <thead>
         <tr>
+            <th>Numero</th>
             <th>Nome</th>
-            <th>Título</th>
-            <th>Mensagem</th>
-            <th>Tópicos</th>
-            <th>Imagem</th>
+            <th>Url</th>
+            <th>Assunto</th>
             <th>Editar</th>
             <th>Remover</th>
         </tr>
@@ -20,19 +19,9 @@
         @foreach($mensagens as $mensagem)
         <tr>
             <td>{{$mensagem->user->name}}</td>
-            <td>{{$mensagem->titulo}}</td>
-            <td>{{$mensagem->mensagem}}</td>
-            <td> 
-                @if($mensagem->topicos)
-                @foreach($mensagem->topicos as $topico)
-                <div>{{$topico->topico}}</div>
-                @endforeach
-                @endif
-            </td>
-            <td>
-                <!-- <img src="{{Storage::url($mensagem->imagem)}}" alt="{{$mensagem->titulo}}" class="showImg" /> -->
-                <img src="{{$mensagem->imagem}}" alt="{{$mensagem->titulo}}" class="showImg" />
-            </td>
+            <td>{{$mensagem->nome}}</td>
+            <td>{{$mensagem->url}}</td>
+            <td>{{$mensagem->assunto}}</td>
             <td>
                 <a href="{{route('mensagem.edit',$mensagem->id)}}" class="button">
                     Editar

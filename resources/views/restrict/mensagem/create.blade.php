@@ -12,28 +12,20 @@
     @csrf
     @method('POST')
     <div>
-        <label for="titulo">Título</label>
-        <input type="text" name="titulo" id = "titulo" value="{{old('titulo') }}" required/>
+        <label for="numero">Numero</label>
+        <input type="text" name="numero" id = "numero" value="{{old('numero') }}" required/>
     </div>
     <div>
-        <label for="msg">Mensagem</label>
-        <textarea name="mensagem" id="msg" required>{{old('mensagem')}} </textarea>
+        <label for="nome">Nome</label>
+        <input type="text" name="nome" id = "nome" value="{{old('nome') }}" required/>
     </div>
     <div>
-        <label>
-            Tópicos
-            <a href="{{url('topico/create')}}" class="button">Novo Tópico</a>
-        </label>
-        <div class="sub">
-            @foreach($topicos as $topico)
-            <input type="checkbox" id="top{{$topico->id}}" value="{{$topico->id}}" name="topico[]" @if($topico->id==old('topico_id')) checked @endif />
-            <label for="top{{$topico->id}}">{{$topico->topico}}</label>
-            @endforeach
-        </div>
+        <label for="url">Url</label>
+        <input name="url" id="url" required>{{old('url')}} </input>
     </div>
     <div>
-        <label for="img">Imagem</label>
-        <input type="file" name="imagem" id="igm" accept="image/*" required />
+        <label for="assunto">Assunto</label>
+        <textarea name="assunto" id="assunto" required>{{old('assunto')}} </textarea>
     </div>
     <button type="submit" class="button">Salvar</button>
 </form>

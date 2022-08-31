@@ -17,8 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()
                 ->onDelete('cascade')->onUpdate('cascade');
-            $table->string('titulo');
-            $table->text('mensagem');
+            $table->string('numero');
+            $table->string('nome');
+            $table->text('url');
+            $table->string('assunto');
             $table->timestamps();
         });
     }

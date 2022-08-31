@@ -12,33 +12,16 @@
     @csrf
     @method('PUT')
     <div>
-        <label for="titulo">Título</label>
-        <input type="text" name="titulo" id = "titulo" value="{{ $mensagem->titulo }}" required/>
+        <label for="nome">Nome</label>
+        <input type="text" name="nome" id = "titulo" value="{{ $mensagem->nome }}" required/>
     </div>
     <div>
-        <label for="msg">Mensagem</label>
-        <textarea name="mensagem" id="msg" required>{{ $mensagem->mensagem}} </textarea>
+        <label for="codigo">Url</label>
+        <textarea name="url" id="url" required>{{ $mensagem->url}} </textarea>
     </div>
     <div>
-        <label>
-            Tópicos
-            <a href="{{url('topico/create')}}" class="button">Novo Tópico</a>
-        </label>
-        <div class="sub">
-            @foreach($topicos as $topico)
-            <input type="checkbox" id="top{{$topico->id}}" value="{{$topico->id}}" name="topico[]" @foreach($mensagem->topicos as $msgTopico)
-            @if($topico->id == $msgTopico->id) checked @endif
-            @endforeach
-            />
-            <label for="top{{$topico->id}}">{{$topico->topico}}</label>
-            @endforeach
-        </div>
-    </div>
-    <div>
-        <label for="img">Imagem</label>
-        <input type="file" name="imagem" id="img" accept="image/*" required />
-        <!-- <img src="{{Storage::url($mensagem->imagem)}}" alt="{{$mensagem->titulo}}" class="showImg" /> -->
-        <img src="{{$mensagem->imagem}}" alt="{{$mensagem->titulo}}" class="showImg" />
+        <label for="assunto">Assunto</label>
+        <textarea name="assunto" id="assunto" required>{{ $mensagem->assunto}} </textarea>
     </div>
     <button type="submit" class="button">Salvar</button>
 </form>

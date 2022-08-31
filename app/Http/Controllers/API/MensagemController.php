@@ -14,8 +14,8 @@ class MensagemController extends Controller
      */
     public function index()
     {
-        $mensagens = Mensagem::select(['id', 'titulo', 'mensagem' , 'imagem', 'imagem', 'created_at', 'user_id'])
-            ->with(['topicos:id,topico', 'user:id,name'])
+        $mensagens = Mensagem::select(['id', 'numero', 'nome', 'url', 'assunto', 'created_at', 'user_id'])
+            ->with(['user:id,name'])
             ->orderBy('created_at', 'DESC')
             ->get();
         return $this->success($mensagens);
@@ -40,6 +40,7 @@ class MensagemController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate ([
+            'numero' => 'required|max:255',
             'titulo' => 'required|max:255',
             'mensagem' => 'required|max:255',
             'topico' => 'array|exists:App\Models\Topico,id'
@@ -48,16 +49,10 @@ class MensagemController extends Controller
             try{
                 $mensagem = new Mensagem();
                 $mensagem->user_id = Auth::user()->id;
+                $mensagem->numero = $request->get('numero');
                 $mensagem->titulo = $request->get('titulo');
                 $mensagem->mensagem = $request->get('mensagem');
-                if ($request->get('imagem')){
-                    $image_base64 = base64_decode($request->get('imagem'));
-                    Storage::disk('s3')->url($request->get('file'));
-                    $path = Storage::disk('s3')->url($request->get('file'));
-                    $mensagem->imagem = $path;
-                }
                 $mensagem->save();
-                $mensagem->topicos()->attach($request->get('topico'));
                 return $this->success($mensagem);
             } catch (\Throwable $th){
                 return $this->error("Erro no cadastro da mensagem", 401, $th->getMessage());
@@ -74,7 +69,7 @@ class MensagemController extends Controller
     public function show($id)
     {
         try{
-            $mensagem = Mensagem::where('id', $id) ->with('topicos')->get();
+            $mensagem = Mensagem::where('id', $id) ->get();
             return $this->success($mensagem[0]);
         } catch (\Throwable $th){
                 return $this->error("Mensagem não encontrada", 401, $th->getMessage());
@@ -102,29 +97,21 @@ class MensagemController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate ([
-            'titulo' => 'max:255',
-            'mensagem' => 'max:255',
-            'topico' => 'array|exists:App\Models\Topico,id'
+            'numero' => 'max:255',
+            'nome' => 'max:255',
+            'url' => 'max:255',
+            'assunto' => 'max:255',
         ]);
         if($validated){
             try{
                 $mensagem = Mensagem::findOrFail($id);
-                if ($request->get('titulo')){
-                    $mensagem->titulo = $request->get('titulo');
+                if ($request->get('numero')){
+                    $mensagem->titulo = $request->get('numero');
                 }
                 if ($request->get('mensagem')){
                     $mensagem->mensagem = $request->get('mensagem');
                 }
-                if ($request->get('imagem')){  
-                    $image_base64 = base64_decode($request->get('imagem'));
-                    Storage::disk('s3')->url($request->get('file'));
-                    $path = Storage::disk('s3')->url($request->get('file'));
-                    $mensagem->imagem = $path;
-                }
                 $mensagem->save();
-                if ($request->get('topico')){
-                    $mensagem->topicos()->async($request->get('topico'));
-                }
                 return $this->success($mensagem);
             } catch (\Throwable $th){
                 return $this->error("Erro ao atualizar a mensagem", 401, $th->getMessage());
